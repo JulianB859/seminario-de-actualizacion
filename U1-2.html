@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>U1-2 - Login con menú</title>
+</head>
+<body>
+  <h1>Consola del sistema (ver consola del navegador)</h1>
+
+  <script>
+    let usuario = "cliente1";
+    let contraseña = "clave123";
+    const MAX_INTENTOS = 3;
+
+    function login() {
+      let intentos = 0;
+      let autenticado = false;
+
+      while (intentos < MAX_INTENTOS && !autenticado) {
+        const userInput = prompt("Ingrese nombre de usuario:");
+        const passInput = prompt("Ingrese contraseña:");
+
+        if (userInput === usuario && passInput === contraseña) {
+          console.log(`¡Bienvenido/a ${usuario}!`);
+          autenticado = true;
+          mostrarMenu();
+        } else {
+          intentos++;
+          if (intentos === MAX_INTENTOS) {
+            console.log("Usuario bloqueado. Contacte al administrador");
+          } else {
+            console.log("Usuario y/o contraseña incorrecta");
+          }
+        }
+      }
+    }
+
+    function mostrarMenu() {
+      let opcion;
+      do {
+        opcion = prompt("Menú de acciones:\n1. Cambiar contraseña\nX. Salir");
+        if (opcion === "1") {
+          const nuevaContra = prompt("Ingrese nueva contraseña:");
+          contraseña = nuevaContra;
+          console.log("Contraseña actualizada correctamente.");
+        } else if (opcion !== "X" && opcion !== "x") {
+          console.log("Opción inválida.");
+        }
+      } while (opcion !== "X" && opcion !== "x");
+    }
+
+    // Iniciar el sistema
+    login();
+  </script>
+</body>
+</html>

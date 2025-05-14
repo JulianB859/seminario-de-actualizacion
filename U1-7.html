@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>U1-7 - Comprar artículo</title>
+</head>
+<body>
+  <h1>Consola del sistema (ver consola del navegador)</h1>
+
+  <script>
+    let articulos = [
+      { id: 1, nombre: "Lavandina x 1L", precio: 875.25, stock: 3000 },
+      { id: 4, nombre: "Detergente x 500mL", precio: 1102.45, stock: 2010 },
+      { id: 22, nombre: "Jabón en polvo x 250g", precio: 650.22, stock: 407 }
+    ];
+
+    function menuSistema() {
+      let opcion;
+      do {
+        opcion = prompt(
+          "Menú de Artículos:\n1. Listar artículos\n2. Nuevo artículo\n3. Editar artículo\n4. Eliminar artículo\n5. Comprar artículo\nX. Salir"
+        );
+
+        switch (opcion) {
+          case "1":
+            listarArticulos();
+            break;
+          case "2":
+            nuevoArticulo();
+            break;
+          case "3":
+            editarArticulo();
+            break;
+          case "4":
+            eliminarArticulo();
+            break;
+          case "5":
+            comprarArticulo();
+            break;
+          case "X":
+          case "x":
+            console.log("Saliendo del sistema.");
+            break;
+          default:
+            console.log("Opción inválida.");
+        }
+      } while (opcion !== "X" && opcion !== "x");
+    }
+
+    function listarArticulos() {
+      console.log("Lista de artículos:");
+      if (articulos.length === 0) {
+        console.log("No hay artículos cargados.");
+        return;
+      }
+      articulos.forEach(art => {
+        console.log(`ID: ${art.id} - ${art.nombre} - $${art.precio} - Stock: ${art.stock}`);
+      });
+    }
+
+    function nuevoArticulo() {
+      const id = parseInt(prompt("ID del nuevo artículo:"));
+      if (articulos.some(a => a.id === id)) {
+        console.log("Ya existe un artículo con ese ID.");
+        return;
+      }
+      const nombre = prompt("Nombre del artículo:");
+      const precio = parseFloat(prompt("Precio del artículo:"));
+      const stock = parseInt(prompt("Stock del artículo:"));
+      if (isNaN(precio) || isNaN(stock)) {
+        console.log("Precio y/o stock inválidos.");
+        return;
+      }
+      articulos.push({ id, nombre, precio, stock });
+      console.log("Artículo agregado.");
+    }
+
+    function editarArticulo() {
+      const id = parseInt(prompt("ID del artículo a editar:"));
+      const art = articulos.find(a => a.id === id);
+      if (!art) {
+        console.log("No se encontró el artículo.");
+        return;
+      }
+      const nuevoNombre = prompt(`Nombre actual: ${art.nombre}\nNuevo nombre:`);
+      const nuevoPrecio = parseFloat(prompt(`Precio actual: ${art.precio}\nNuevo precio:`));
+      const nuevoStock = parseInt(prompt(`Stock actual: ${art.stock}\nNuevo stock:`));
+      if (nuevoNombre) art.nombre = nuevoNombre;
+      if (!isNaN(nuevoPrecio)) art.precio = nuevoPrecio;
+      if (!isNaN(nuevoStock)) art.stock = nuevoStock;
+      console.log("Artículo editado.");
+    }
+
+    function eliminarArticulo() {
+      const id = parseInt(prompt("ID del artículo a eliminar:"));
+      const index = articulos.findIndex(a => a.id === id);
+      if (index === -1) {
+        console.log("No se encontró el artículo.");
+        return;
+      }
+      const confirmar = confirm(`¿Eliminar artículo con ID ${id}?`);
+      if (confirmar) {
+        articulos.splice(index, 1);
+        console.log("Artículo eliminado.");
+      }
+    }
+
+    function comprarArticulo() {
+      listarArticulos();
+      const id = parseInt(prompt("Ingrese el ID del artículo a comprar:"));
+      const articulo = articulos.find(a => a.id === id);
+      if (!articulo) {
+        console.log("Artículo no encontrado.");
+        return;
+      }
+
+      if (articulo.stock === 0) {
+        console.log("No hay stock disponible para este artículo.");
+        return;
+      }
+
+      const cantidad = parseInt(prompt(`Ingrese la cantidad a comprar (Stock disponible: ${articulo.stock}):`));
+
+      if (isNaN(cantidad) || cantidad <= 0) {
+        console.log("Cantidad inválida.");
+        return;
+      }
+
+      if (cantidad > articulo.stock) {
+        console.log("No hay suficiente stock disponible.");
+        return;
+      }
+
+      const confirmar = confirm(`¿Confirmar compra de ${cantidad} unidad(es) de "${articulo.nombre}" por $${(articulo.precio * cantidad).toFixed(2)}?`);
+      if (confirmar) {
+        articulo.stock -= cantidad;
+        console.log(`Compra realizada. Nuevo stock: ${articulo.stock}`);
+      } else {
+        console.log("Compra cancelada.");
+      }
+    }
+
+    // Iniciar menú
+    menuSistema();
+  </script>
+</body>
+</html>

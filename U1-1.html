@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>U1-1 - Autenticación</title>
+</head>
+<body>
+  <h1>Consola del sistema (ver consola del navegador)</h1>
+
+  <script>
+    const USUARIO = "cliente1";
+    const CONTRASEÑA = "clave123";
+    let intentos = 0;
+    const MAX_INTENTOS = 3;
+    let autenticado = false;
+
+    while (intentos < MAX_INTENTOS && !autenticado) {
+      const userInput = prompt("Ingrese nombre de usuario:");
+      const passInput = prompt("Ingrese contraseña:");
+
+      if (userInput === USUARIO && passInput === CONTRASEÑA) {
+        console.log(`¡Bienvenido/a ${USUARIO}!`);
+        autenticado = true;
+      } else {
+        intentos++;
+        if (intentos === MAX_INTENTOS) {
+          console.log("Usuario bloqueado. Contacte al administrador");
+        } else {
+          console.log("Usuario y/o contraseña incorrecta");
+        }
+      }
+    }
+  </script>
+</body>
+</html>

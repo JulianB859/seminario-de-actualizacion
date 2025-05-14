@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>U1-10 - Gestión de cuentas solo para Administradores</title>
+</head>
+<body>
+  <h1>Sistema de ventas con gestión de cuentas (ver consola)</h1>
+
+  <script>
+    // Usuarios con roles
+    const usuarios = [
+      { usuario: "admin", clave: "Admin123!!", rol: "Administrador" },
+      { usuario: "cliente1", clave: "Cliente123!!", rol: "Cliente" },
+      { usuario: "vendedor1", clave: "Vendedor123!!", rol: "Vendedor" },
+      { usuario: "deposito1", clave: "Deposito123!!", rol: "Depósito" }
+    ];
+
+    // Artículos de limpieza
+    const articulos = [
+      { id: 1, nombre: "Lavandina x 1L", precio: 875.25, stock: 3000 },
+      { id: 4, nombre: "Detergente x 500mL", precio: 1102.45, stock: 2010 },
+      { id: 22, nombre: "Jabón en polvo x 250g", precio: 650.22, stock: 407 }
+    ];
+
+    function login() {
+      let intentos = 0;
+      while (intentos < 3) {
+        const user = prompt("Usuario:");
+        const pass = prompt("Contraseña:");
+        const encontrado = usuarios.find(u => u.usuario === user && u.clave === pass);
+
+        if (encontrado) {
+          alert(`¡Bienvenido/a ${user}! Rol: ${encontrado.rol}`);
+          menuPrincipal(encontrado);
+          return;
+        } else {
+          alert("Usuario y/o contraseña incorrecta.");
+          intentos++;
+        }
+      }
+      alert("Usuario bloqueado. Contacte al administrador.");
+    }
+
+    function menuPrincipal(usuario) {
+      let opcion;
+      do {
+        opcion = prompt(
+          `Menú Principal - Rol: ${usuario.rol}\n1. Listar artículos\n2. Comprar artículo\n` +
+          (usuario.rol === "Administrador" ? "3. Crear usuario\n4. Editar usuario\n5. Eliminar usuario\n" : "") +
+          "X. Cerrar sesión"
+        );
+
+        switch (opcion) {
+          case "1":
+            listarArticulos();
+            break;
+          case "2":
+            comprarArticulo();
+            break;
+          case "3":
+            if (usuario.rol === "Administrador") crearUsuario();
+            else console.log("Acción no permitida para tu rol.");
+            break;
+          case "4":
+            if (usuario.rol === "Administrador") editarUsuario();
+            else console.log("Acción no permitida para tu rol.");
+            break;
+          case "5":
+            if (usuario.rol === "Administrador") eliminarUsuario();
+            else console.log("Acción no permitida para tu rol.");
+            break;
+          case "X":
+          case "x":
+            console.log("Sesión cerrada.");
+            break;
+          default:
+            console.log("Opción no válida.");
+        }
+      } while (opcion !== "X" && opcion !== "x");
+    }
+
+    function listarArticulos() {
+      console.log("Lista de artículos:");
+      articulos.forEach(a => {
+        console.log(`ID: ${a.id} - ${a.nombre} - $${a.precio} - Stock: ${a.stock}`);
+      });
+    }
+
+    function comprarArticulo() {
+      listarArticulos();
+      const id = parseInt(prompt("Ingrese ID del artículo a comprar:"));
+      const articulo = articulos.find(a => a.id === id);
+      if (!articulo) {
+        console.log("Artículo no encontrado.");
+        return;
+      }
+
+      if (articulo.stock === 0) {
+        console.log("No hay stock disponible.");
+        return;
+      }
+
+      const cantidad = parseInt(prompt(`Cantidad a comprar (Stock: ${articulo.stock}):`));
+      if (isNaN(cantidad) || cantidad <= 0 || cantidad > articulo.stock) {
+        console.log("Cantidad inválida.");
+        return;
+      }
+
+      const confirmar = confirm(`Confirmar compra de ${cantidad} x "${articulo.nombre}" = $${(cantidad * articulo.precio).toFixed(2)} ?`);
+      if (confirmar) {
+        articulo.stock -= cantidad;
+        console.log("Compra realizada. Nuevo stock:", articulo.stock);
+      } else {
+        console.log("Compra cancelada.");
+      }
+    }
+
+    function crearUsuario() {
+      const usuario = prompt("Nombre de usuario del nuevo usuario:");
+      if (usuarios.some(u => u.usuario === usuario)) {
+        console.log("Ya existe un usuario con ese nombre.");
+        return;
+      }
+      const clave = prompt("Contraseña:");
+      const rol = prompt("Rol del usuario (Administrador, Cliente, Vendedor, Depósito):");
+      if (!["Administrador", "Cliente", "Vendedor", "Depósito"].includes(rol)) {
+        console.log("Rol inválido.");
+        return;
+      }
+      usuarios.push({ usuario, clave, rol });
+      console.log("Usuario creado.");
+    }
+
+    function editarUsuario() {
+      const usuario = prompt("Nombre de usuario a editar:");
+      const usuarioEncontrado = usuarios.find(u => u.usuario === usuario);
+      if (!usuarioEncontrado) {
+        console.log("Usuario no encontrado.");
+        return;
+      }
+      const nuevaClave = prompt(`Contraseña actual: ${usuarioEncontrado.clave}\nNueva contraseña:`);
+      const nuevoRol = prompt(`Rol actual: ${usuarioEncontrado.rol}\nNuevo rol (Administrador, Cliente, Vendedor, Depósito):`);
+      if (nuevaClave) usuarioEncontrado.clave = nuevaClave;
+      if (["Administrador", "Cliente", "Vendedor", "Depósito"].includes(nuevoRol)) usuarioEncontrado.rol = nuevoRol;
+      console.log("Usuario editado.");
+    }
+
+    function eliminarUsuario() {
+      const usuario = prompt("Nombre de usuario a eliminar:");
+      const index = usuarios.findIndex(u => u.usuario === usuario);
+      if (index === -1) {
+        console.log("Usuario no encontrado.");
+        return;
+      }
+      const confirmar = confirm(`¿Eliminar usuario ${usuario}?`);
+      if (confirmar) {
+        usuarios.splice(index, 1);
+        console.log("Usuario eliminado.");
+      }
+    }
+
+    // Iniciar sistema
+    login();
+  </script>
+</body>
+</html>

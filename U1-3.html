@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>U1-3 - Validación de contraseña segura</title>
+</head>
+<body>
+  <h1>Consola del sistema (ver consola del navegador)</h1>
+
+  <script>
+    let usuario = "cliente1";
+    let contraseña = "clave123";
+    const MAX_INTENTOS = 3;
+
+    function login() {
+      let intentos = 0;
+      let autenticado = false;
+
+      while (intentos < MAX_INTENTOS && !autenticado) {
+        const userInput = prompt("Ingrese nombre de usuario:");
+        const passInput = prompt("Ingrese contraseña:");
+
+        if (userInput === usuario && passInput === contraseña) {
+          console.log(`¡Bienvenido/a ${usuario}!`);
+          autenticado = true;
+          mostrarMenu();
+        } else {
+          intentos++;
+          if (intentos === MAX_INTENTOS) {
+            console.log("Usuario bloqueado. Contacte al administrador");
+          } else {
+            console.log("Usuario y/o contraseña incorrecta");
+          }
+        }
+      }
+    }
+
+    function mostrarMenu() {
+      let opcion;
+      do {
+        opcion = prompt("Menú de acciones:\n1. Cambiar contraseña\nX. Salir");
+        if (opcion === "1") {
+          cambiarContraseña();
+        } else if (opcion !== "X" && opcion !== "x") {
+          console.log("Opción inválida.");
+        }
+      } while (opcion !== "X" && opcion !== "x");
+    }
+
+    function cambiarContraseña() {
+      let nuevaContra = prompt("Ingrese nueva contraseña:\n(Mínimo 8, máximo 16 caracteres, al menos una mayúscula y dos símbolos)");
+      if (validarContraseña(nuevaContra)) {
+        contraseña = nuevaContra;
+        console.log("Contraseña actualizada correctamente.");
+      } else {
+        console.log("La contraseña no cumple con los requisitos de seguridad.");
+      }
+    }
+
+    function validarContraseña(pass) {
+      const largoValido = pass.length >= 8 && pass.length <= 16;
+      const tieneMayuscula = /[A-Z]/.test(pass);
+      const simbolosEspeciales = pass.match(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/g);
+      const tieneSimbolos = simbolosEspeciales && simbolosEspeciales.join('').length >= 2;
+
+      return largoValido && tieneMayuscula && tieneSimbolos;
+    }
+
+    // Iniciar el sistema
+    login();
+  </script>
+</body>
+</html>

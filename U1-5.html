@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>U1-5 - Artículos de limpieza</title>
+</head>
+<body>
+  <h1>Consola del sistema (ver consola del navegador)</h1>
+
+  <script>
+    // Datos iniciales de artículos de limpieza
+    const articulos = [
+      {
+        id: 1,
+        nombre: "Lavandina x 1L",
+        precio: 875.25,
+        stock: 3000
+      },
+      {
+        id: 4,
+        nombre: "Detergente x 500mL",
+        precio: 1102.45,
+        stock: 2010
+      },
+      {
+        id: 22,
+        nombre: "Jabón en polvo x 250g",
+        precio: 650.22,
+        stock: 407
+      }
+    ];
+
+    // Mostrar artículos por consola
+    console.log("Artículos cargados en el sistema:");
+    articulos.forEach(articulo => {
+      console.log(`ID: ${articulo.id} - ${articulo.nombre} - Precio: $${articulo.precio} - Stock: ${articulo.stock}`);
+    });
+  </script>
+</body>
+</html>

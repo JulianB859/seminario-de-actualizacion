@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>U1-6 - CRUD de artículos</title>
+</head>
+<body>
+  <h1>Consola del sistema (ver consola del navegador)</h1>
+
+  <script>
+    // Base de datos en memoria
+    let articulos = [
+      { id: 1, nombre: "Lavandina x 1L", precio: 875.25, stock: 3000 },
+      { id: 4, nombre: "Detergente x 500mL", precio: 1102.45, stock: 2010 },
+      { id: 22, nombre: "Jabón en polvo x 250g", precio: 650.22, stock: 407 }
+    ];
+
+    function mostrarMenuCRUD() {
+      let opcion;
+      do {
+        opcion = prompt(
+          "Menú de Artículos:\n1. Listar artículos\n2. Nuevo artículo\n3. Editar artículo\n4. Eliminar artículo\nX. Salir"
+        );
+
+        switch (opcion) {
+          case "1":
+            listarArticulos();
+            break;
+          case "2":
+            nuevoArticulo();
+            break;
+          case "3":
+            editarArticulo();
+            break;
+          case "4":
+            eliminarArticulo();
+            break;
+          case "X":
+          case "x":
+            console.log("Saliendo del menú.");
+            break;
+          default:
+            console.log("Opción inválida.");
+        }
+      } while (opcion !== "X" && opcion !== "x");
+    }
+
+    function listarArticulos() {
+      console.log("Lista de artículos:");
+      if (articulos.length === 0) {
+        console.log("No hay artículos cargados.");
+        return;
+      }
+
+      articulos.forEach(art => {
+        console.log(`ID: ${art.id} - ${art.nombre} - $${art.precio} - Stock: ${art.stock}`);
+      });
+    }
+
+    function nuevoArticulo() {
+      const id = parseInt(prompt("Ingrese ID del nuevo artículo:"));
+      if (articulos.some(a => a.id === id)) {
+        console.log("Ya existe un artículo con ese ID.");
+        return;
+      }
+
+      const nombre = prompt("Ingrese nombre del artículo:");
+      const precio = parseFloat(prompt("Ingrese precio del artículo:"));
+      const stock = parseInt(prompt("Ingrese stock del artículo:"));
+
+      if (isNaN(precio) || isNaN(stock)) {
+        console.log("Precio y/o stock inválidos.");
+        return;
+      }
+
+      articulos.push({ id, nombre, precio, stock });
+      console.log("Artículo agregado correctamente.");
+    }
+
+    function editarArticulo() {
+      const id = parseInt(prompt("Ingrese ID del artículo a editar:"));
+      const articulo = articulos.find(a => a.id === id);
+
+      if (!articulo) {
+        console.log("No se encontró un artículo con ese ID.");
+        return;
+      }
+
+      const nuevoNombre = prompt(`Nombre actual: ${articulo.nombre}\nNuevo nombre:`);
+      const nuevoPrecio = parseFloat(prompt(`Precio actual: ${articulo.precio}\nNuevo precio:`));
+      const nuevoStock = parseInt(prompt(`Stock actual: ${articulo.stock}\nNuevo stock:`));
+
+      if (nuevoNombre) articulo.nombre = nuevoNombre;
+      if (!isNaN(nuevoPrecio)) articulo.precio = nuevoPrecio;
+      if (!isNaN(nuevoStock)) articulo.stock = nuevoStock;
+
+      console.log("Artículo editado correctamente.");
+    }
+
+    function eliminarArticulo() {
+      const id = parseInt(prompt("Ingrese ID del artículo a eliminar:"));
+      const index = articulos.findIndex(a => a.id === id);
+
+      if (index === -1) {
+        console.log("No se encontró un artículo con ese ID.");
+        return;
+      }
+
+      const confirmado = confirm(`¿Está seguro de eliminar el artículo con ID ${id}?`);
+      if (confirmado) {
+        articulos.splice(index, 1);
+        console.log("Artículo eliminado correctamente.");
+      } else {
+        console.log("Eliminación cancelada.");
+      }
+    }
+
+    // Iniciar menú CRUD
+    mostrarMenuCRUD();
+  </script>
+</body>
+</html>
