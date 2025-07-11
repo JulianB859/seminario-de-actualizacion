@@ -1,5 +1,5 @@
-import './calculadora-component.js';
+import './login-component.js';
 
 const app = document.getElementById('app');
-const calculadora = document.createElement('calculadora-component');
-app.appendChild(calculadora);
+const login = document.createElement('login-component');
+app.appendChild(login);
