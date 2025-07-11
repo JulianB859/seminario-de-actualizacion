@@ -1,5 +1,5 @@
-import './calculadora-component.js';
+import './precios-component.js';
 
 const app = document.getElementById('app');
-const calculadora = document.createElement('calculadora-component');
-app.appendChild(calculadora);
+const precios = document.createElement('precios-component');
+app.appendChild(precios);
